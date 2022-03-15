@@ -46,6 +46,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.buttonOpen = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.statusStripMessage = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
             // 
             // buttonAdd
@@ -203,11 +205,29 @@
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(635, 25);
+            this.toolStrip1.TabIndex = 16;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // statusStripMessage
+            // 
+            this.statusStripMessage.Location = new System.Drawing.Point(0, 407);
+            this.statusStripMessage.Name = "statusStripMessage";
+            this.statusStripMessage.Size = new System.Drawing.Size(635, 22);
+            this.statusStripMessage.TabIndex = 17;
+            this.statusStripMessage.Text = "statusStrip1";
+            // 
             // WikiApplication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(635, 429);
+            this.Controls.Add(this.statusStripMessage);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonOpen);
             this.Controls.Add(this.label4);
@@ -251,6 +271,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonOpen;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.StatusStrip statusStripMessage;
     }
 }
 
