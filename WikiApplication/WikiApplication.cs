@@ -17,6 +17,8 @@ namespace WikiApplication
             InitializeComponent();
         }
         #region Properties
+        // The prototype must use a two-dimensional array of type string
+        // All wiki data is stored/retrieved using a binary file format
         static int rowSize = 12;
         static int colSize = 4; // Name, Category, Structure, Definition
         string[,] dataStructures = new string[rowSize, colSize];
@@ -67,7 +69,7 @@ namespace WikiApplication
         #region Add button
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-
+            // The user can add a new item
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
                !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
                !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
@@ -156,6 +158,10 @@ namespace WikiApplication
         #region Search Button
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            // A double mouse click in the search text box will clear the search input box
+            // The user can search for an item which will be displayed in the four text boxes
+            // Search input box must clear if search unsuccessful
+
             int startIndex = -1;
             int finalIndex = ptr;
             bool flag = false;
