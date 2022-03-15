@@ -67,20 +67,19 @@ namespace WikiApplication
         #region Add button
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
                !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
                !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
                !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
             {
-
                 if (ptr < rowSize)
                 {
                     dataStructures[ptr, 0] = textBoxName.Text;
                     dataStructures[ptr, 1] = textBoxCategory.Text;
                     dataStructures[ptr, 2] = textBoxStructure.Text;
                     dataStructures[ptr, 3] = textBoxDefinition.Text;
-                    //ptr++;
-
+              
                     var result = MessageBox.Show("Proceed with new definition?", "Add New Definition",
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                     if (result == DialogResult.OK)
@@ -93,7 +92,6 @@ namespace WikiApplication
                         dataStructures[ptr, 1] = "Category";
                         dataStructures[ptr, 2] = "Structure";
                         dataStructures[ptr, 3] = "Definition";
-
                     }
                 }
             }
@@ -110,7 +108,7 @@ namespace WikiApplication
 
                 if (currentRecord >= 0)
                 {
-                    DialogResult delName = MessageBox.Show("Do you wish to delete this Name?",
+                    DialogResult delName = MessageBox.Show("Do you wish to delete this definition?",
                      "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (delName == DialogResult.Yes)
                     {
@@ -129,7 +127,8 @@ namespace WikiApplication
             }
             catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show("Invalid input");
+                MessageBox.Show("Select an item to delete.");
+                // needs focus
             }
         }
         #endregion
@@ -137,6 +136,7 @@ namespace WikiApplication
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             int currentRecord = listViewDataStructures.SelectedIndices[0];
+            // System.ArgumentOutOfRangeException - needs try/catch
             if (currentRecord >= 0)
             {
                 var result = MessageBox.Show("Proceed with update?", "Edit Record",
@@ -156,39 +156,42 @@ namespace WikiApplication
         #region Search Button
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            listViewDataStructures.Items.Clear();
-            if (!string.IsNullOrEmpty(textBoxName.Text))
+            int startIndex = -1;
+            int finalIndex = ptr;
+            bool flag = false;
+            int foundIndex = -1;
+
+            while (!flag && !((finalIndex - startIndex) <= 1))
             {
-                for (int x = 0; x < rowSize; x++)
+                int newIndex = (finalIndex + startIndex) / 2;
+                if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 0) 
                 {
-                    if (string.Compare(dataStructures[x, 0], textBoxName.Text) == 0)
+                    foundIndex = newIndex;
+                    flag = true;
+                    DisplayDataStructures();
+                    ClearTextBoxes();
+                    break;
+                }
+                else
+                {
+                    if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 1)
                     {
-                        ListViewItem lvi = new ListViewItem(dataStructures[x, 0]);
-                        lvi.SubItems.Add(dataStructures[x, 1]);
-                        lvi.SubItems.Add(dataStructures[x, 2]);
-                        lvi.SubItems.Add(dataStructures[x, 3]);
-                        listViewDataStructures.Items.Add(lvi);
-                    }
-                    listViewDataStructures.ForeColor = Color.Red;
+                        finalIndex = newIndex;
+                    }   
+                    else
+                        startIndex = newIndex;
                 }
             }
-            else if (!string.IsNullOrEmpty(textBoxCategory.Text))
+            if (flag)
             {
-                for (int x = 0; x < rowSize; x++)
-                {
-                    if (string.Compare(dataStructures[x, 1], textBoxCategory.Text) == 0)
-                    {
-                        ListViewItem lvi = new ListViewItem(dataStructures[x, 0]);
-                        lvi.SubItems.Add(dataStructures[x, 1]);
-                        lvi.SubItems.Add(dataStructures[x, 2]);
-                        lvi.SubItems.Add(dataStructures[x, 3]);
-                        listViewDataStructures.Items.Add(lvi);
-                    }
-                }
-                listViewDataStructures.ForeColor = Color.Green;
+                textBoxSearch.Text = dataStructures[foundIndex, 0];
+                textBoxName.Text = dataStructures[foundIndex, 0];
+                textBoxCategory.Text = dataStructures[foundIndex, 1];
+                textBoxStructure.Text = dataStructures[foundIndex, 2];
+                textBoxDefinition.Text = dataStructures[foundIndex, 3];
             }
-            DisplayDataStructures();
-            ClearTextBoxes();
+            else
+                textBoxSearch.Text = "Not found ";
         }
         #endregion
 
