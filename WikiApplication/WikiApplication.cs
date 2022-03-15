@@ -27,7 +27,7 @@ namespace WikiApplication
         private void ListViewDataStructures_Click(object sender, EventArgs e)
         {
             int currentDataStructure = listViewDataStructures.SelectedIndices[0];
-            textBoxName.Text = dataStructures[currentDataStructure, 0 ];
+            textBoxName.Text = dataStructures[currentDataStructure, 0];
             textBoxCategory.Text = dataStructures[currentDataStructure, 1];
             textBoxStructure.Text = dataStructures[currentDataStructure, 2];
             textBoxDefinition.Text = dataStructures[currentDataStructure, 3];
@@ -72,30 +72,30 @@ namespace WikiApplication
                !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
                !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
             {
-                for (int x = 0; x < rowSize; x++)
-                {
-                    if (ptr < rowSize)
-                    {
-                        dataStructures[x, 0] = textBoxName.Text;
-                        dataStructures[x, 1] = textBoxCategory.Text;
-                        dataStructures[x, 2] = textBoxStructure.Text;
-                        dataStructures[x, 3] = textBoxDefinition.Text;
 
-                        var result = MessageBox.Show("Proceed with new definition?", "Add New Definition",
-                            MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                        if (result == DialogResult.OK)
-                            break;
-                        else
-                        {
-                            dataStructures[x, 0] = "";
-                            dataStructures[x, 1] = "Category";
-                            dataStructures[x, 2] = "Structure";
-                            dataStructures[x, 3] = "Definition";
-                            break;
-                        }
+                if (ptr < rowSize)
+                {
+                    dataStructures[ptr, 0] = textBoxName.Text;
+                    dataStructures[ptr, 1] = textBoxCategory.Text;
+                    dataStructures[ptr, 2] = textBoxStructure.Text;
+                    dataStructures[ptr, 3] = textBoxDefinition.Text;
+                    //ptr++;
+
+                    var result = MessageBox.Show("Proceed with new definition?", "Add New Definition",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if (result == DialogResult.OK)
+                    {
+                        ptr++;
+                    }
+                    else
+                    {
+                        dataStructures[ptr, 0] = "";
+                        dataStructures[ptr, 1] = "Category";
+                        dataStructures[ptr, 2] = "Structure";
+                        dataStructures[ptr, 3] = "Definition";
+
                     }
                 }
-                
             }
             DisplayDataStructures();
             ClearTextBoxes();
@@ -104,23 +104,93 @@ namespace WikiApplication
         #region Delete Button
         private void buttonDelete_Click(object sender, EventArgs e)
         {
+            try
+            {
+                int currentRecord = listViewDataStructures.SelectedIndices[0];
+
+                if (currentRecord >= 0)
+                {
+                    DialogResult delName = MessageBox.Show("Do you wish to delete this Name?",
+                     "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (delName == DialogResult.Yes)
+                    {
+                        dataStructures[currentRecord, 0] = "";
+                        dataStructures[currentRecord, 1] = "";
+                        dataStructures[currentRecord, 2] = "";
+                        dataStructures[currentRecord, 3] = "";
+                        DisplayDataStructures();
+                        ClearTextBoxes();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Item NOT Deleted", "Delete Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Invalid input");
+            }
+        }
+        #endregion
+        #region Edit Button
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
             int currentRecord = listViewDataStructures.SelectedIndices[0];
             if (currentRecord >= 0)
             {
-                DialogResult delName = MessageBox.Show("Do you wish to delete this Name?",
-                 "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (delName == DialogResult.Yes)
+                var result = MessageBox.Show("Proceed with update?", "Edit Record",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.OK)
                 {
-                    dataStructures[currentRecord, 0] = "";
-                    dataStructures[currentRecord, 1] = "";
-                    dataStructures[currentRecord, 2] = "";
-                    dataStructures[currentRecord, 3] = "";
+                    dataStructures[currentRecord, 0] = textBoxName.Text;
+                    dataStructures[currentRecord, 1] = textBoxCategory.Text;
+                    dataStructures[currentRecord, 2] = textBoxStructure.Text;
+                    dataStructures[currentRecord, 3] = textBoxDefinition.Text;
                     DisplayDataStructures();
                     ClearTextBoxes();
-                    
                 }
             }
         }
         #endregion
+        #region Search Button
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            listViewDataStructures.Items.Clear();
+            if (!string.IsNullOrEmpty(textBoxName.Text))
+            {
+                for (int x = 0; x < rowSize; x++)
+                {
+                    if (string.Compare(dataStructures[x, 0], textBoxName.Text) == 0)
+                    {
+                        ListViewItem lvi = new ListViewItem(dataStructures[x, 0]);
+                        lvi.SubItems.Add(dataStructures[x, 1]);
+                        lvi.SubItems.Add(dataStructures[x, 2]);
+                        lvi.SubItems.Add(dataStructures[x, 3]);
+                        listViewDataStructures.Items.Add(lvi);
+                    }
+                    listViewDataStructures.ForeColor = Color.Red;
+                }
+            }
+            else if (!string.IsNullOrEmpty(textBoxCategory.Text))
+            {
+                for (int x = 0; x < rowSize; x++)
+                {
+                    if (string.Compare(dataStructures[x, 1], textBoxCategory.Text) == 0)
+                    {
+                        ListViewItem lvi = new ListViewItem(dataStructures[x, 0]);
+                        lvi.SubItems.Add(dataStructures[x, 1]);
+                        lvi.SubItems.Add(dataStructures[x, 2]);
+                        lvi.SubItems.Add(dataStructures[x, 3]);
+                        listViewDataStructures.Items.Add(lvi);
+                    }
+                }
+                listViewDataStructures.ForeColor = Color.Green;
+            }
+            DisplayDataStructures();
+            ClearTextBoxes();
+        }
+        #endregion
+
     }
 }
