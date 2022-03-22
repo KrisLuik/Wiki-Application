@@ -95,6 +95,7 @@ namespace WikiApplication
                             dataStructures[x, 1] = textBoxCategory.Text;
                             dataStructures[x, 2] = textBoxStructure.Text;
                             dataStructures[x, 3] = textBoxDefinition.Text;
+                            ptr++;
                         break;
                         }
                     }
@@ -121,6 +122,7 @@ namespace WikiApplication
                         dataStructures[currentRecord, 1] = "";
                         dataStructures[currentRecord, 2] = "";
                         dataStructures[currentRecord, 3] = "";
+                        ptr--;
                         DisplayDataStructures();
                         BubbleSort();
                         ClearTextBoxes();
@@ -141,22 +143,32 @@ namespace WikiApplication
         #region Edit Button
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            int currentRecord = listViewDataStructures.SelectedIndices[0];
-            // System.ArgumentOutOfRangeException - needs try/catch
-            if (currentRecord >= 0)
-            {
-                var result = MessageBox.Show("Proceed with update?", "Edit Record",
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                if (result == DialogResult.OK)
+            try
+            {   
+                int currentRecord = listViewDataStructures.SelectedIndices[0];
+                if (currentRecord >= 0)
                 {
-                    dataStructures[currentRecord, 0] = textBoxName.Text;
-                    dataStructures[currentRecord, 1] = textBoxCategory.Text;
-                    dataStructures[currentRecord, 2] = textBoxStructure.Text;
-                    dataStructures[currentRecord, 3] = textBoxDefinition.Text;
-                    DisplayDataStructures();
-                    ClearTextBoxes();
+                    var result = MessageBox.Show("Proceed with update?", "Edit Record",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if (result == DialogResult.OK)
+                    {
+                        dataStructures[currentRecord, 0] = textBoxName.Text;
+                        dataStructures[currentRecord, 1] = textBoxCategory.Text;
+                        dataStructures[currentRecord, 2] = textBoxStructure.Text;
+                        dataStructures[currentRecord, 3] = textBoxDefinition.Text;
+                        DisplayDataStructures();
+                        ClearTextBoxes();
+                        toolStripStatusLabel1.Text = "Data item changed.";
+                    }
                 }
+
             }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Please select an item to edit.");
+                
+            }
+             
         }
         #endregion
         #region Search Button (Binary method)
@@ -167,9 +179,10 @@ namespace WikiApplication
             // Write the code for a Binary Search for the Name in the 2D array
             // Display the information in the other textboxes when found
             // Add suitable feedback if the search in not successful and clear the search textbox
-
+            ClearStatusMessage();
             int startIndex = -1;
             int finalIndex = ptr;
+            Console.WriteLine(finalIndex);
             bool flag = false;
             int foundIndex = -1;
 
@@ -248,5 +261,15 @@ namespace WikiApplication
             }
         }
         #endregion
+        #region Utility methods
+        private void ClearStatusMessage()
+        {
+            toolStripStatusLabel1.Text = "";
+        }
+        #endregion
+        private void WikiApplication_Load(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "hello";
+        }
     }
 }

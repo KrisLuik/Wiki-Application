@@ -48,6 +48,8 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.statusStripMessage = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripMessage.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonAdd
@@ -216,11 +218,18 @@
             // 
             // statusStripMessage
             // 
+            this.statusStripMessage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
             this.statusStripMessage.Location = new System.Drawing.Point(0, 407);
             this.statusStripMessage.Name = "statusStripMessage";
             this.statusStripMessage.Size = new System.Drawing.Size(635, 22);
             this.statusStripMessage.TabIndex = 17;
             this.statusStripMessage.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // WikiApplication
             // 
@@ -247,6 +256,9 @@
             this.Controls.Add(this.buttonAdd);
             this.Name = "WikiApplication";
             this.Text = "Wiki Data Structures";
+            this.Load += new System.EventHandler(this.WikiApplication_Load);
+            this.statusStripMessage.ResumeLayout(false);
+            this.statusStripMessage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,6 +286,7 @@
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.StatusStrip statusStripMessage;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 
