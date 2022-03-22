@@ -28,11 +28,19 @@ namespace WikiApplication
         #region ListView
         private void ListViewDataStructures_Click(object sender, EventArgs e)
         {
-            int currentDataStructure = listViewDataStructures.SelectedIndices[0];
-            textBoxName.Text = dataStructures[currentDataStructure, 0];
-            textBoxCategory.Text = dataStructures[currentDataStructure, 1];
-            textBoxStructure.Text = dataStructures[currentDataStructure, 2];
-            textBoxDefinition.Text = dataStructures[currentDataStructure, 3];
+            try
+            {
+                int currentDataStructure = listViewDataStructures.SelectedIndices[0];
+                textBoxName.Text = dataStructures[currentDataStructure, 0];
+                textBoxCategory.Text = dataStructures[currentDataStructure, 1];
+                textBoxStructure.Text = dataStructures[currentDataStructure, 2];
+                textBoxDefinition.Text = dataStructures[currentDataStructure, 3];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Select an item from the listbox.");
+            }
+
         }
         #endregion
         #region Display Data Structures
@@ -42,63 +50,58 @@ namespace WikiApplication
             listViewDataStructures.ForeColor = Color.Black;
             for (int x = 0; x < rowSize; x++)
             {
-                // Displaying name and category
-                ListViewItem listviewItem = new ListViewItem(dataStructures[x, 0]);
-                listviewItem.SubItems.Add(dataStructures[x, 1]);
-                listviewItem.SubItems.Add(dataStructures[x, 2]);
-                listViewDataStructures.Items.Add(listviewItem);
+                if (!string.IsNullOrWhiteSpace(dataStructures[x,0]))
+                {
+                    // Displaying name and category
+                    // StackOverflowException when bubble sort method added
+                    ListViewItem listviewItem = new ListViewItem(dataStructures[x, 0]);
+                    listviewItem.SubItems.Add(dataStructures[x, 1]);
+                    listviewItem.SubItems.Add(dataStructures[x, 2]);
+                    listviewItem.SubItems.Add(dataStructures[x, 3]);
+                    listViewDataStructures.Items.Add(listviewItem);
+                }
             }
+            BubbleSort();   
         }
         #endregion
         #region Clear TextBoxes Method
         private void ClearTextBoxes()
         {
-            textBoxName.Clear();
+            textBoxName.Text = "";
             textBoxName.Focus();
-
-            textBoxCategory.Clear();
-            textBoxCategory.Focus();
-
-            textBoxStructure.Clear();
-            textBoxStructure.Focus();
-
-            textBoxDefinition.Clear();
-            textBoxDefinition.Focus();
+            textBoxCategory.Text = "";
+            textBoxStructure.Text = "";
+            textBoxDefinition.Text = "";
         }
         #endregion
         #region Add button
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            // The user can add a new item
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
-               !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
-               !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
-               !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
+                !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
+                !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
+                !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
             {
-                if (ptr < rowSize)
+                var result = MessageBox.Show("Proceed with new Record?", "Add New Record",
+                               MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                for (int x = 0; x < rowSize; x++)
                 {
-                    dataStructures[ptr, 0] = textBoxName.Text;
-                    dataStructures[ptr, 1] = textBoxCategory.Text;
-                    dataStructures[ptr, 2] = textBoxStructure.Text;
-                    dataStructures[ptr, 3] = textBoxDefinition.Text;
-              
-                    var result = MessageBox.Show("Proceed with new definition?", "Add New Definition",
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    
                     if (result == DialogResult.OK)
                     {
-                        ptr++;
-                    }
-                    else
-                    {
-                        dataStructures[ptr, 0] = "";
-                        dataStructures[ptr, 1] = "Category";
-                        dataStructures[ptr, 2] = "Structure";
-                        dataStructures[ptr, 3] = "Definition";
+                        if (dataStructures[x, 0] == null)
+                        {
+                            dataStructures[x, 0] = textBoxName.Text;
+                            dataStructures[x, 1] = textBoxCategory.Text;
+                            dataStructures[x, 2] = textBoxStructure.Text;
+                            dataStructures[x, 3] = textBoxDefinition.Text;
+                        break;
+                        }
                     }
                 }
             }
+            BubbleSort();
             DisplayDataStructures();
-            ClearTextBoxes();
         }
         #endregion
         #region Delete Button
@@ -119,6 +122,7 @@ namespace WikiApplication
                         dataStructures[currentRecord, 2] = "";
                         dataStructures[currentRecord, 3] = "";
                         DisplayDataStructures();
+                        BubbleSort();
                         ClearTextBoxes();
                     }
                     else
@@ -155,12 +159,14 @@ namespace WikiApplication
             }
         }
         #endregion
-        #region Search Button
+        #region Search Button (Binary method)
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            // A double mouse click in the search text box will clear the search input box
             // The user can search for an item which will be displayed in the four text boxes
             // Search input box must clear if search unsuccessful
+            // Write the code for a Binary Search for the Name in the 2D array
+            // Display the information in the other textboxes when found
+            // Add suitable feedback if the search in not successful and clear the search textbox
 
             int startIndex = -1;
             int finalIndex = ptr;
@@ -170,12 +176,10 @@ namespace WikiApplication
             while (!flag && !((finalIndex - startIndex) <= 1))
             {
                 int newIndex = (finalIndex + startIndex) / 2;
-                if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 0) 
+                if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 0)
                 {
                     foundIndex = newIndex;
                     flag = true;
-                    DisplayDataStructures();
-                    ClearTextBoxes();
                     break;
                 }
                 else
@@ -183,7 +187,7 @@ namespace WikiApplication
                     if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 1)
                     {
                         finalIndex = newIndex;
-                    }   
+                    }
                     else
                         startIndex = newIndex;
                 }
@@ -200,6 +204,49 @@ namespace WikiApplication
                 textBoxSearch.Text = "Not found ";
         }
         #endregion
-
+        #region Bubble sort 
+        private void BubbleSort()
+        // Sort 2D array by Name ascending
+        {
+            for (int x = 1; x < rowSize; x++)
+            {
+                for (int i = 0; i < rowSize - 1; i++)
+                {
+                    if (!(string.IsNullOrEmpty(dataStructures[i + 1, 0])))
+                    {
+                        if (string.Compare(dataStructures[i, 0], dataStructures[i + 1, 0]) == 1)
+                        {
+                            Swap(i);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+        #region Swap Method
+        private void Swap(int index)
+        {
+            // Use a separate swap method that passes (by reference) the array element to be swapped
+            string temp;
+            for (int i = 0; i < colSize; i++)
+            {
+                temp = dataStructures[index, i];
+                dataStructures[index, i] = dataStructures[index + 1, i];
+                dataStructures[index + 1, i] = temp;
+            }
+        }
+        #endregion
+        #region Double-click Clear Searchbox
+        private void textBoxSearch_MouseDoubleClick(object sender, MouseEventArgs e)
+        // A double mouse click in the search text box will clear the search input box
+        {
+            if (!string.IsNullOrWhiteSpace(textBoxSearch.Text))
+            {
+                textBoxSearch.Clear();
+                ClearTextBoxes();
+                textBoxSearch.Focus();
+            }
+        }
+        #endregion
     }
 }
