@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,6 +32,7 @@ namespace WikiApplication
         {
             try
             {
+                ClearStatusMessage();
                 int currentDataStructure = listViewDataStructures.SelectedIndices[0];
                 textBoxName.Text = dataStructures[currentDataStructure, 0];
                 textBoxCategory.Text = dataStructures[currentDataStructure, 1];
@@ -75,6 +78,7 @@ namespace WikiApplication
         }
         #endregion
         #region Add button
+        // The user can add a new item.
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
@@ -96,13 +100,16 @@ namespace WikiApplication
                             dataStructures[x, 2] = textBoxStructure.Text;
                             dataStructures[x, 3] = textBoxDefinition.Text;
                             ptr++;
-                        break;
+                            toolStripStatusLabel1.Text = "Item added successfully.";
+                            break;
                         }
                     }
                 }
             }
             BubbleSort();
             DisplayDataStructures();
+            ClearTextBoxes();
+
         }
         #endregion
         #region Delete Button
@@ -110,8 +117,8 @@ namespace WikiApplication
         {
             try
             {
+                ClearStatusMessage();
                 int currentRecord = listViewDataStructures.SelectedIndices[0];
-
                 if (currentRecord >= 0)
                 {
                     DialogResult delName = MessageBox.Show("Do you wish to delete this definition?",
@@ -123,9 +130,10 @@ namespace WikiApplication
                         dataStructures[currentRecord, 2] = "";
                         dataStructures[currentRecord, 3] = "";
                         ptr--;
-                        DisplayDataStructures();
                         BubbleSort();
+                        DisplayDataStructures();
                         ClearTextBoxes();
+                        toolStripStatusLabel1.Text = "Data item deleted.";
                     }
                     else
                     {
@@ -144,7 +152,8 @@ namespace WikiApplication
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             try
-            {   
+            {
+                ClearStatusMessage();
                 int currentRecord = listViewDataStructures.SelectedIndices[0];
                 if (currentRecord >= 0)
                 {
@@ -172,13 +181,14 @@ namespace WikiApplication
         }
         #endregion
         #region Search Button (Binary method)
+        // The user can search for an item which will be displayed in the four text boxes
+        // Search input box must clear if search unsuccessful.
+        // Write the code for a Binary Search for the Name in the 2D array
+        // Display the information in the other textboxes when found
+        // Add suitable feedback if the search in not successful and clear the search textbox
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            // The user can search for an item which will be displayed in the four text boxes
-            // Search input box must clear if search unsuccessful
-            // Write the code for a Binary Search for the Name in the 2D array
-            // Display the information in the other textboxes when found
-            // Add suitable feedback if the search in not successful and clear the search textbox
+            
             ClearStatusMessage();
             int startIndex = -1;
             int finalIndex = ptr;
@@ -214,7 +224,9 @@ namespace WikiApplication
                 textBoxDefinition.Text = dataStructures[foundIndex, 3];
             }
             else
-                textBoxSearch.Text = "Not found ";
+                toolStripStatusLabel1.Text = "Not found ";
+                textBoxSearch.Clear();
+                textBoxSearch.Focus();
         }
         #endregion
         #region Bubble sort 
@@ -269,7 +281,31 @@ namespace WikiApplication
         #endregion
         private void WikiApplication_Load(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = "hello";
+            toolStripStatusLabel1.Text = "Wiki Application for Data Structures.";
         }
+        #region Open 
+        private void buttonOpen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (Stream stream = File.Open(defaultFileName, FileMode.Open))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    for (int y = 0; y < colSize; y++)
+                    {
+                        for (int x = 0; x < rowSize; x++)
+                        {
+                            dataStructures[x, y] = (int)bin.Deserialize(stream);
+                        }
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            DisplayDataStructures();
+        }
+        #endregion
     }
 }
