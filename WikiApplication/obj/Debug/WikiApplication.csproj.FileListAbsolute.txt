@@ -9,3 +9,13 @@ C:\Users\30045325\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\Wi
 C:\Users\30045325\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.csproj.CoreCompileInputs.cache
 C:\Users\30045325\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.exe
 C:\Users\30045325\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.pdb
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\bin\Debug\WikiApplication.exe.config
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\bin\Debug\WikiApplication.exe
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\bin\Debug\WikiApplication.pdb
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.csproj.AssemblyReference.cache
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.Properties.Resources.resources
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.WikiApplication.resources
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.csproj.GenerateResource.cache
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.csproj.CoreCompileInputs.cache
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.exe
+C:\Users\krist\Documents\GitHub\Wiki-Application\WikiApplication\obj\Debug\WikiApplication.pdb
