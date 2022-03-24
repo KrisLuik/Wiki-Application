@@ -93,7 +93,7 @@ namespace WikiApplication
                     
                     if (result == DialogResult.OK)
                     {
-                        if (dataStructures[x, 0] == null)
+                        if (dataStructures[x, 0] == null || dataStructures[x,0] == "")
                         {
                             dataStructures[x, 0] = textBoxName.Text;
                             dataStructures[x, 1] = textBoxCategory.Text;
@@ -102,6 +102,10 @@ namespace WikiApplication
                             ptr++;
                             toolStripStatusLabel1.Text = "Item added successfully.";
                             break;
+                        }
+                        else
+                        {
+                            toolStripStatusLabel1.Text = "Array is full";
                         }
                     }
                 }
@@ -125,14 +129,14 @@ namespace WikiApplication
                      "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (delName == DialogResult.Yes)
                     {
-                        dataStructures[currentRecord, 0] = "";
-                        dataStructures[currentRecord, 1] = "";
-                        dataStructures[currentRecord, 2] = "";
-                        dataStructures[currentRecord, 3] = "";
+                        dataStructures[currentRecord, 0] = null;
+                        dataStructures[currentRecord, 1] = null;
+                        dataStructures[currentRecord, 2] = null;
+                        dataStructures[currentRecord, 3] = null;
                         ptr--;
                         BubbleSort();
-                        DisplayDataStructures();
                         ClearTextBoxes();
+                        DisplayDataStructures();
                         toolStripStatusLabel1.Text = "Data item deleted.";
                     }
                     else
@@ -286,25 +290,68 @@ namespace WikiApplication
         #region Open 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
+            BinaryReader br;
+            int x = 0;
+            listViewDataStructures.Items.Clear();
             try
             {
-                using (Stream stream = File.Open(defaultFileName, FileMode.Open))
+                br = new BinaryReader(new FileStream("defaultFileName.dat", FileMode.Open));
+            }
+            catch (Exception fe)
+            {
+                MessageBox.Show(fe.Message + "\n Cannot open file for reading");
+                return;
+            }
+            while (br.BaseStream.Position != br.BaseStream.Length)
+            {
+                try
                 {
-                    BinaryFormatter bin = new BinaryFormatter();
-                    for (int y = 0; y < colSize; y++)
-                    {
-                        for (int x = 0; x < rowSize; x++)
-                        {
-                            dataStructures[x, y] = (int)bin.Deserialize(stream);
-                        }
-                    }
+                    dataStructures[x, 0] = br.ReadString();
+                    dataStructures[x, 1] = br.ReadString();
+                    dataStructures[x, 2] = br.ReadString();
+                    dataStructures[x, 3] = br.ReadString();
+                    x++;
+                }
+                catch (Exception fe)
+                {
+                    MessageBox.Show("Cannot read data from file or EOF" + fe);
+                    break;
+                }
+                ptr = x;
+                DisplayDataStructures();
+            }
+            br.Close();
+        }
+        #endregion
+        #region Save Button
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            BinaryWriter bw;
+            try
+            {
+                bw = new BinaryWriter(new FileStream("defaultFileName.dat", FileMode.Create));
+            }
+            catch (Exception fe)
+            {
+                MessageBox.Show(fe.Message + "\n Cannot append to file.");
+                return;
+            }
+            try
+            {
+                for (int i = 0; i < ptr; i++)
+                {
+                    bw.Write(dataStructures[i, 0]);
+                    bw.Write(dataStructures[i, 1]);
+                    bw.Write(dataStructures[i, 2]);
+                    bw.Write(dataStructures[i, 3]);
                 }
             }
-            catch (IOException ex)
+            catch (Exception fe)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(fe.Message + "\n Cannot write data to file.");
+                return;
             }
-            DisplayDataStructures();
+            bw.Close();
         }
         #endregion
     }
