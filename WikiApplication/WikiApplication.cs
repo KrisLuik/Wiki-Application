@@ -9,7 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+// Name: Kristiin Tribbeck
+// This application is using 2d array to demonstrate the name, structure, category, and definiton of a data structure.
 namespace WikiApplication
 {
     public partial class WikiApplication : Form
@@ -24,9 +25,10 @@ namespace WikiApplication
         static int rowSize = 12;
         static int colSize = 4; // Name, Category, Structure, Definition
         string[,] dataStructures = new string[rowSize, colSize];
-        string defaultFileName = "default.bin";
+        string defaultFileName = "default.dat";
         int ptr = 0;
         #endregion
+
         #region ListView
         private void ListViewDataStructures_Click(object sender, EventArgs e)
         {
@@ -46,6 +48,7 @@ namespace WikiApplication
 
         }
         #endregion
+
         #region Display Data Structures
         private void DisplayDataStructures()
         {
@@ -53,7 +56,7 @@ namespace WikiApplication
             listViewDataStructures.ForeColor = Color.Black;
             for (int x = 0; x < rowSize; x++)
             {
-                if (!string.IsNullOrWhiteSpace(dataStructures[x,0]))
+                if (!string.IsNullOrWhiteSpace(dataStructures[x, 0]))
                 {
                     // Displaying name and category
                     // StackOverflowException when bubble sort method added
@@ -64,9 +67,10 @@ namespace WikiApplication
                     listViewDataStructures.Items.Add(listviewItem);
                 }
             }
-            BubbleSort();   
+            BubbleSort();
         }
         #endregion
+
         #region Clear TextBoxes Method
         private void ClearTextBoxes()
         {
@@ -77,37 +81,42 @@ namespace WikiApplication
             textBoxDefinition.Text = "";
         }
         #endregion
+
         #region Add button
         // The user can add a new item.
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
             {
-                var result = MessageBox.Show("Proceed with new Record?", "Add New Record",
-                               MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                //var result = MessageBox.Show("Proceed with new Record?", "Add New Record",
+                //               MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 for (int x = 0; x < rowSize; x++)
                 {
-                    
-                    if (result == DialogResult.OK)
+
+                    //if (result == DialogResult.OK)
+                    //{
+                    if (dataStructures[x, 0] == null || dataStructures[x, 0] == "")
                     {
-                        if (dataStructures[x, 0] == null || dataStructures[x,0] == "")
-                        {
-                            dataStructures[x, 0] = textBoxName.Text;
-                            dataStructures[x, 1] = textBoxCategory.Text;
-                            dataStructures[x, 2] = textBoxStructure.Text;
-                            dataStructures[x, 3] = textBoxDefinition.Text;
-                            ptr++;
-                            toolStripStatusLabel1.Text = "Item added successfully.";
-                            break;
-                        }
-                        else
-                        {
-                            toolStripStatusLabel1.Text = "Array is full";
-                        }
+                        ClearStatusMessage();
+                        dataStructures[x, 0] = textBoxName.Text;
+                        dataStructures[x, 1] = textBoxCategory.Text;
+                        dataStructures[x, 2] = textBoxStructure.Text;
+                        dataStructures[x, 3] = textBoxDefinition.Text;
+                        ptr++;
+                        toolStripStatusLabel1.Text = "Item added successfully.";
+
+                        break;
                     }
+                    else
+                    {
+                        toolStripStatusLabel1.Text = "Array is full";
+                    }
+                    //}
                 }
             }
             BubbleSort();
@@ -116,6 +125,7 @@ namespace WikiApplication
 
         }
         #endregion
+
         #region Delete Button
         private void buttonDelete_Click(object sender, EventArgs e)
         {
@@ -152,6 +162,7 @@ namespace WikiApplication
             }
         }
         #endregion
+
         #region Edit Button
         private void buttonEdit_Click(object sender, EventArgs e)
         {
@@ -174,16 +185,16 @@ namespace WikiApplication
                         toolStripStatusLabel1.Text = "Data item changed.";
                     }
                 }
-
             }
             catch (ArgumentOutOfRangeException)
             {
                 MessageBox.Show("Please select an item to edit.");
-                
+
             }
-             
+
         }
         #endregion
+
         #region Search Button (Binary method)
         // The user can search for an item which will be displayed in the four text boxes
         // Search input box must clear if search unsuccessful.
@@ -192,7 +203,7 @@ namespace WikiApplication
         // Add suitable feedback if the search in not successful and clear the search textbox
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            
+
             ClearStatusMessage();
             int startIndex = -1;
             int finalIndex = ptr;
@@ -229,42 +240,72 @@ namespace WikiApplication
             }
             else
                 toolStripStatusLabel1.Text = "Not found ";
-                textBoxSearch.Clear();
-                textBoxSearch.Focus();
+            textBoxSearch.Clear();
+            textBoxSearch.Focus();
         }
         #endregion
+
         #region Bubble sort 
         private void BubbleSort()
-        // Sort 2D array by Name ascending
-        {
-            for (int x = 1; x < rowSize; x++)
+        {// og index is 1
+            for (int x = 0; x < rowSize; x++)
             {
-                for (int i = 0; i < rowSize - 1; i++)
-                {
-                    if (!(string.IsNullOrEmpty(dataStructures[i + 1, 0])))
-                    {
-                        if (string.Compare(dataStructures[i, 0], dataStructures[i + 1, 0]) == 1)
+                for (int i = 1; i < rowSize - 1; i++)
+                {                                           // i + 1, 0
+                    if (!(string.IsNullOrEmpty(dataStructures[i + 0, 1])))
+                    {                                                       // i + 1, 0 
+                        if (string.Compare(dataStructures[i, 0], dataStructures[i + 0, 1]) == 0)
                         {
                             Swap(i);
                         }
                     }
                 }
+                Console.WriteLine("This is the output 1 " + dataStructures[x, 0]);
             }
+            Console.WriteLine("Output 2");
         }
+
+
+
+
+
+
+
+
+        //{
+        //    // Sort 2D array by Name ascending
+        //    for (int x = 1; x < rowSize; x++)
+        //    {
+        //        for (int i = 1; i < rowSize - 1; i++)
+        //        {
+        //            if (!(string.IsNullOrEmpty(dataStructures[i + 1, 0])))
+        //            {
+        //                if (string.Compare(dataStructures[i, 0], dataStructures[i + 1, 0]) == 0)
+        //                {
+        //                    Console.WriteLine(dataStructures[i, 0]);
+        //                    Swap(i);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
+
         #region Swap Method
         private void Swap(int index)
+        // Use a separate swap method that passes (by reference) the array element to be swapped
         {
-            // Use a separate swap method that passes (by reference) the array element to be swapped
             string temp;
             for (int i = 0; i < colSize; i++)
             {
                 temp = dataStructures[index, i];
                 dataStructures[index, i] = dataStructures[index + 1, i];
                 dataStructures[index + 1, i] = temp;
+                Console.WriteLine(dataStructures[index, i]);
             }
         }
         #endregion
+
         #region Double-click Clear Searchbox
         private void textBoxSearch_MouseDoubleClick(object sender, MouseEventArgs e)
         // A double mouse click in the search text box will clear the search input box
@@ -277,6 +318,7 @@ namespace WikiApplication
             }
         }
         #endregion
+
         #region Utility methods
         private void ClearStatusMessage()
         {
@@ -323,6 +365,7 @@ namespace WikiApplication
             br.Close();
         }
         #endregion
+
         #region Save Button
         private void buttonSave_Click(object sender, EventArgs e)
         {
