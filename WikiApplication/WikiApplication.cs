@@ -21,10 +21,10 @@ namespace WikiApplication
             InitializeComponent();
         }
         #region Properties
-        // This prototype uses a two-dimensional array of type string
-        // All wiki data is stored/retrieved using a binary file format
+        // This prototype uses a two-dimensional array of type string.
+        // All wiki data is stored/retrieved using a binary file format.
         static int rowSize = 12;
-        static int colSize = 4; // Name, Category, Structure, Definition
+        static int colSize = 4; // Name, Category, Structure, Definition.
         string[,] dataStructures = new string[rowSize, colSize];
         string defaultFileName = "definitions.dat";
         int ptr = 0;
@@ -111,7 +111,7 @@ namespace WikiApplication
         #endregion
         // Create a DELETE button that will clear the selected item from the listviewbox.
         #region Delete Button
-        
+
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
             try
@@ -199,7 +199,7 @@ namespace WikiApplication
                 {
                     foundIndex = newIndex;
                     flag = true;
-                    listViewDataStructures.Items[0].Selected = true;   
+                    listViewDataStructures.Items[0].Selected = true;
                     toolStripStatusLabel1.Text = "Found at index " + foundIndex;
                     break;
                 }
@@ -242,7 +242,7 @@ namespace WikiApplication
         #region Bubble sort 
         private void Sort()
         {
-            for (int x = 0; x < rowSize; x++)
+            for (int x = 0; x < rowSize-1; x++)
             {
                 for (int i = 0; i < rowSize - 1; i++)
                 {
@@ -257,7 +257,7 @@ namespace WikiApplication
             }
         }
         #endregion
-        // Use a separate swap method that passes (by reference) the array element to be swapped
+        // Use a separate swap method that passes (by reference) the array element to be swapped.
         #region Swap Method
         private void Swap(int index)
         {
@@ -273,7 +273,7 @@ namespace WikiApplication
         // A double mouse click in the search text box will clear the search input box.
         #region Double-click Clear Searchbox
         private void TextBoxSearch_MouseDoubleClick(object sender, MouseEventArgs e)
-       
+
         {
             if (!string.IsNullOrWhiteSpace(textBoxSearch.Text))
             {
@@ -289,13 +289,14 @@ namespace WikiApplication
         private void WikiApplication_Load(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Wiki Application for Data Structures.";
-            for (int x = 0; x < rowSize - 1; x++)
+            for (int x = 0; x < rowSize ; x++)
             {
                 for (int y = 0; y < colSize - 1; y++)
                 {
                     dataStructures[x, y] = "~";
                 }
             }
+            Sort();
             DisplayArray();
         }
         #endregion
@@ -331,6 +332,7 @@ namespace WikiApplication
                     break;
                 }
                 ptr = x;
+                Sort();
                 DisplayArray();
             }
             br.Close();
@@ -399,7 +401,7 @@ namespace WikiApplication
         #region Input Handling
         private void InputHandling(KeyPressEventArgs e)
         {
-            if (char.IsLetter(e.KeyChar) || e.KeyChar == (char)Keys.Back || e.KeyChar == (char)Keys.Space || e.KeyChar == '.' || e.KeyChar == ',' || e.KeyChar == '-')
+            if (char.IsLetter(e.KeyChar) || e.KeyChar == (char)Keys.Back || e.KeyChar == (char)Keys.Space || e.KeyChar == '.' || e.KeyChar == ',' || e.KeyChar == '-' || e.KeyChar == '(' || e.KeyChar == ')')
             {
                 // These characters may pass.
                 e.Handled = false;
@@ -427,7 +429,7 @@ namespace WikiApplication
 
         private void textBoxDefinition_KeyPress(object sender, KeyPressEventArgs e)
         {
-            InputHandling(e);
+            //InputHandling(e);
         }
         #endregion
         // Create a CLEAR method to clear the four text boxes so a new definition can be added.
@@ -442,7 +444,7 @@ namespace WikiApplication
             textBoxSearch.Clear();
             textBoxSearch.Focus();
         }
-        
+
         private void ClearTextBoxes()
         {
             textBoxName.Clear();
@@ -452,5 +454,16 @@ namespace WikiApplication
             textBoxDefinition.Clear();
         }
         #endregion
+
+        private void buttonSort_Click(object sender, EventArgs e)
+        {
+            Sort();
+            DisplayArray();
+        }
+
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
