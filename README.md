@@ -1,2 +1,2 @@
-# Wiki Application
+# Wiki Application for Data Structures
  
