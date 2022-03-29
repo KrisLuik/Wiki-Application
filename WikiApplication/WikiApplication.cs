@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 // Name: Kristiin Tribbeck
+// ID: 30045325
 // This application is using 2d array to demonstrate the name, structure, category, and definiton of a data structure.
 namespace WikiApplication
 {
@@ -45,12 +46,11 @@ namespace WikiApplication
             {
                 MessageBox.Show("Select an item from the listbox.");
             }
-
         }
         #endregion
 
         #region Display Data Structures
-        private void DisplayDataStructures()
+        private void DisplayArray()
         {
             listViewDataStructures.Items.Clear();
             listViewDataStructures.ForeColor = Color.Black;
@@ -59,26 +59,24 @@ namespace WikiApplication
                 if (!string.IsNullOrWhiteSpace(dataStructures[x, 0]))
                 {
                     // Displaying name and category
-                    // StackOverflowException when bubble sort method added
-                    ListViewItem listviewItem = new ListViewItem(dataStructures[x, 0]);
-                    listviewItem.SubItems.Add(dataStructures[x, 1]);
-                    listviewItem.SubItems.Add(dataStructures[x, 2]);
-                    listviewItem.SubItems.Add(dataStructures[x, 3]);
-                    listViewDataStructures.Items.Add(listviewItem);
+                    ListViewItem lvi = new ListViewItem(dataStructures[x, 0]);
+                    lvi.SubItems.Add(dataStructures[x, 1]);
+                    lvi.SubItems.Add(dataStructures[x, 2]);
+                    lvi.SubItems.Add(dataStructures[x, 3]);
+                    listViewDataStructures.Items.Add(lvi);
                 }
             }
-            BubbleSort();
         }
         #endregion
 
         #region Clear TextBoxes Method
         private void ClearTextBoxes()
         {
-            textBoxName.Text = "";
+            textBoxName.Clear();
             textBoxName.Focus();
-            textBoxCategory.Text = "";
-            textBoxStructure.Text = "";
-            textBoxDefinition.Text = "";
+            textBoxCategory.Clear();
+            textBoxStructure.Clear();
+            textBoxDefinition.Clear();
         }
         #endregion
 
@@ -86,49 +84,48 @@ namespace WikiApplication
         // The user can add a new item.
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-
+            ClearStatusMessage();
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxCategory.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxStructure.Text) &&
                 !string.IsNullOrWhiteSpace(textBoxDefinition.Text))
             {
-
-                //var result = MessageBox.Show("Proceed with new Record?", "Add New Record",
-                //               MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                var result = MessageBox.Show("Proceed with new Record?", "Add New Record",
+                               MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 for (int x = 0; x < rowSize; x++)
                 {
 
-                    //if (result == DialogResult.OK)
-                    //{
-                    if (dataStructures[x, 0] == null || dataStructures[x, 0] == "")
+                    if (result == DialogResult.OK)
                     {
-                        ClearStatusMessage();
-                        dataStructures[x, 0] = textBoxName.Text;
-                        dataStructures[x, 1] = textBoxCategory.Text;
-                        dataStructures[x, 2] = textBoxStructure.Text;
-                        dataStructures[x, 3] = textBoxDefinition.Text;
-                        ptr++;
-                        toolStripStatusLabel1.Text = "Item added successfully.";
-
-                        break;
+                        if (dataStructures[x, 0] == null || dataStructures[x, 0] == "")
+                        {
+                            ClearStatusMessage();
+                            dataStructures[x, 0] = textBoxName.Text;
+                            dataStructures[x, 1] = textBoxCategory.Text;
+                            dataStructures[x, 2] = textBoxStructure.Text;
+                            dataStructures[x, 3] = textBoxDefinition.Text;
+                            ptr++;
+                            Sort();
+                            DisplayArray();
+                            ClearTextBoxes();
+                            toolStripStatusLabel1.Text = "Item added successfully.";
+                            break;
+                        }
+                        else
+                        {
+                            toolStripStatusLabel1.Text = "Array is full.";
+                        }
                     }
-                    else
-                    {
-                        toolStripStatusLabel1.Text = "Array is full";
-                    }
-                    //}
                 }
             }
-            BubbleSort();
-            DisplayDataStructures();
-            ClearTextBoxes();
-
         }
         #endregion
 
         #region Delete Button
         private void buttonDelete_Click(object sender, EventArgs e)
         {
+            listViewDataStructures.Items.Clear();
+            listViewDataStructures.ForeColor = Color.Black;
             try
             {
                 ClearStatusMessage();
@@ -137,16 +134,17 @@ namespace WikiApplication
                 {
                     DialogResult delName = MessageBox.Show("Do you wish to delete this definition?",
                      "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
                     if (delName == DialogResult.Yes)
                     {
+                        ListViewItem lvi = new ListViewItem(dataStructures[currentRecord, 0]);
                         dataStructures[currentRecord, 0] = null;
                         dataStructures[currentRecord, 1] = null;
                         dataStructures[currentRecord, 2] = null;
                         dataStructures[currentRecord, 3] = null;
                         ptr--;
-                        BubbleSort();
                         ClearTextBoxes();
-                        DisplayDataStructures();
+                        DisplayArray();
                         toolStripStatusLabel1.Text = "Data item deleted.";
                     }
                     else
@@ -158,244 +156,228 @@ namespace WikiApplication
             catch (ArgumentOutOfRangeException)
             {
                 MessageBox.Show("Select an item to delete.");
-                // needs focus
             }
         }
-        #endregion
 
-        #region Edit Button
-        private void buttonEdit_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ClearStatusMessage();
-                int currentRecord = listViewDataStructures.SelectedIndices[0];
-                if (currentRecord >= 0)
-                {
-                    var result = MessageBox.Show("Proceed with update?", "Edit Record",
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                    if (result == DialogResult.OK)
-                    {
-                        dataStructures[currentRecord, 0] = textBoxName.Text;
-                        dataStructures[currentRecord, 1] = textBoxCategory.Text;
-                        dataStructures[currentRecord, 2] = textBoxStructure.Text;
-                        dataStructures[currentRecord, 3] = textBoxDefinition.Text;
-                        DisplayDataStructures();
-                        ClearTextBoxes();
-                        toolStripStatusLabel1.Text = "Data item changed.";
-                    }
-                }
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                MessageBox.Show("Please select an item to edit.");
+            #endregion
 
-            }
-
-        }
-        #endregion
-
-        #region Search Button (Binary method)
-        // The user can search for an item which will be displayed in the four text boxes
-        // Search input box must clear if search unsuccessful.
-        // Write the code for a Binary Search for the Name in the 2D array
-        // Display the information in the other textboxes when found
-        // Add suitable feedback if the search in not successful and clear the search textbox
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-
-            ClearStatusMessage();
-            int startIndex = -1;
-            int finalIndex = ptr;
-            Console.WriteLine(finalIndex);
-            bool flag = false;
-            int foundIndex = -1;
-
-            while (!flag && !((finalIndex - startIndex) <= 1))
-            {
-                int newIndex = (finalIndex + startIndex) / 2;
-                if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 0)
-                {
-                    foundIndex = newIndex;
-                    flag = true;
-                    break;
-                }
-                else
-                {
-                    if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 1)
-                    {
-                        finalIndex = newIndex;
-                    }
-                    else
-                        startIndex = newIndex;
-                }
-            }
-            if (flag)
-            {
-                textBoxSearch.Text = dataStructures[foundIndex, 0];
-                textBoxName.Text = dataStructures[foundIndex, 0];
-                textBoxCategory.Text = dataStructures[foundIndex, 1];
-                textBoxStructure.Text = dataStructures[foundIndex, 2];
-                textBoxDefinition.Text = dataStructures[foundIndex, 3];
-            }
-            else
-                toolStripStatusLabel1.Text = "Not found ";
-            textBoxSearch.Clear();
-            textBoxSearch.Focus();
-        }
-        #endregion
-
-        #region Bubble sort 
-        private void BubbleSort()
-        {// og index is 1
-            for (int x = 0; x < rowSize; x++)
-            {
-                for (int i = 1; i < rowSize - 1; i++)
-                {                                           // i + 1, 0
-                    if (!(string.IsNullOrEmpty(dataStructures[i + 0, 1])))
-                    {                                                       // i + 1, 0 
-                        if (string.Compare(dataStructures[i, 0], dataStructures[i + 0, 1]) == 0)
-                        {
-                            Swap(i);
-                        }
-                    }
-                }
-                Console.WriteLine("This is the output 1 " + dataStructures[x, 0]);
-            }
-            Console.WriteLine("Output 2");
-        }
-
-
-
-
-
-
-
-
-        //{
-        //    // Sort 2D array by Name ascending
-        //    for (int x = 1; x < rowSize; x++)
-        //    {
-        //        for (int i = 1; i < rowSize - 1; i++)
-        //        {
-        //            if (!(string.IsNullOrEmpty(dataStructures[i + 1, 0])))
-        //            {
-        //                if (string.Compare(dataStructures[i, 0], dataStructures[i + 1, 0]) == 0)
-        //                {
-        //                    Console.WriteLine(dataStructures[i, 0]);
-        //                    Swap(i);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        #endregion
-
-        #region Swap Method
-        private void Swap(int index)
-        // Use a separate swap method that passes (by reference) the array element to be swapped
-        {
-            string temp;
-            for (int i = 0; i < colSize; i++)
-            {
-                temp = dataStructures[index, i];
-                dataStructures[index, i] = dataStructures[index + 1, i];
-                dataStructures[index + 1, i] = temp;
-                Console.WriteLine(dataStructures[index, i]);
-            }
-        }
-        #endregion
-
-        #region Double-click Clear Searchbox
-        private void textBoxSearch_MouseDoubleClick(object sender, MouseEventArgs e)
-        // A double mouse click in the search text box will clear the search input box
-        {
-            if (!string.IsNullOrWhiteSpace(textBoxSearch.Text))
-            {
-                textBoxSearch.Clear();
-                ClearTextBoxes();
-                textBoxSearch.Focus();
-            }
-        }
-        #endregion
-
-        #region Utility methods
-        private void ClearStatusMessage()
-        {
-            toolStripStatusLabel1.Text = "";
-        }
-        #endregion
-        private void WikiApplication_Load(object sender, EventArgs e)
-        {
-            toolStripStatusLabel1.Text = "Wiki Application for Data Structures.";
-        }
-        #region Open 
-        private void buttonOpen_Click(object sender, EventArgs e)
-        {
-            BinaryReader br;
-            int x = 0;
-            listViewDataStructures.Items.Clear();
-            try
-            {
-                br = new BinaryReader(new FileStream("defaultFileName.dat", FileMode.Open));
-            }
-            catch (Exception fe)
-            {
-                MessageBox.Show(fe.Message + "\n Cannot open file for reading");
-                return;
-            }
-            while (br.BaseStream.Position != br.BaseStream.Length)
+            #region Edit Button
+            private void buttonEdit_Click(object sender, EventArgs e)
             {
                 try
                 {
-                    dataStructures[x, 0] = br.ReadString();
-                    dataStructures[x, 1] = br.ReadString();
-                    dataStructures[x, 2] = br.ReadString();
-                    dataStructures[x, 3] = br.ReadString();
-                    x++;
+                    ClearStatusMessage();
+                    int currentRecord = listViewDataStructures.SelectedIndices[0];
+                    if (currentRecord >= 0)
+                    {
+                        var result = MessageBox.Show("Proceed with update?", "Edit Record",
+                            MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        if (result == DialogResult.OK)
+                        {
+                            dataStructures[currentRecord, 0] = textBoxName.Text;
+                            dataStructures[currentRecord, 1] = textBoxCategory.Text;
+                            dataStructures[currentRecord, 2] = textBoxStructure.Text;
+                            dataStructures[currentRecord, 3] = textBoxDefinition.Text;
+                            DisplayArray();
+                            ClearTextBoxes();
+                            toolStripStatusLabel1.Text = "Data item changed.";
+                        }
+                    }
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    MessageBox.Show("Please select an item to edit.");
+                }
+            }
+            #endregion
+
+            #region Search Button (Binary method)
+            // The user can search for an item which will be displayed in the four text boxes
+            // Search input box must clear if search unsuccessful.
+            // Write the code for a Binary Search for the Name in the 2D array
+            // Display the information in the other textboxes when found
+            // Add suitable feedback if the search in not successful and clear the search textbox
+            private void buttonSearch_Click(object sender, EventArgs e)
+            {
+                ClearStatusMessage();
+                int startIndex = -1;
+                int finalIndex = ptr;
+                Console.WriteLine(finalIndex);
+                bool flag = false;
+                int foundIndex = -1;
+
+                while (!flag && !((finalIndex - startIndex) <= 1))
+                {
+                    int newIndex = (finalIndex + startIndex) / 2;
+                    if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 0)
+                    {
+                        foundIndex = newIndex;
+                        flag = true;
+                        toolStripStatusLabel1.Text = "Found at index " + foundIndex;
+                        break;
+                    }
+                    else
+                    {
+                        if (string.Compare(dataStructures[newIndex, 0], textBoxSearch.Text) == 1)
+                        {
+                            finalIndex = newIndex;
+                        }
+                        else
+                            startIndex = newIndex;
+                    }
+                }
+                if (flag)
+                {
+                    textBoxSearch.Text = dataStructures[foundIndex, 0];
+                    textBoxName.Text = dataStructures[foundIndex, 0];
+                    textBoxCategory.Text = dataStructures[foundIndex, 1];
+                    textBoxStructure.Text = dataStructures[foundIndex, 2];
+                    textBoxDefinition.Text = dataStructures[foundIndex, 3];
+                    //toolStripStatusLabel1.Text = "Found at index " + foundIndex;
+                }
+                else if (string.IsNullOrWhiteSpace(textBoxSearch.Text))
+                {
+                    toolStripStatusLabel1.Text = "Enter a name to search.";
+                    textBoxSearch.Clear();
+                    textBoxSearch.Focus();
+                }
+                else
+                {
+                    toolStripStatusLabel1.Text = "Not Found.";
+                    textBoxSearch.Clear();
+                    textBoxSearch.Focus();
+                }
+
+            }
+            #endregion
+
+            #region Bubble sort 
+            private void Sort()
+            {
+                for (int x = 0; x < rowSize; x++)
+                {
+                    for (int i = 0; i < rowSize - 1; i++)
+                    {
+                        if (!(string.IsNullOrEmpty(dataStructures[i + 1, 0])))
+                        {
+                            if (string.Compare(dataStructures[i, 0], dataStructures[i + 1, 1]) == 1)
+                            {
+                                Swap(i);
+                                Console.WriteLine(dataStructures[i, 0] + " is now at index " + i);
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region Swap Method
+            private void Swap(int index)
+            // Use a separate swap method that passes (by reference) the array element to be swapped
+            {
+                string temp;
+                for (int i = 0; i < colSize; i++)
+                {
+                    temp = dataStructures[index, i];
+                    dataStructures[index, i] = dataStructures[index + 1, i];
+                    dataStructures[index + 1, i] = temp;
+                    Console.WriteLine(dataStructures[index, i]);
+                }
+            }
+            #endregion
+
+            #region Double-click Clear Searchbox
+            private void textBoxSearch_MouseDoubleClick(object sender, MouseEventArgs e)
+            // A double mouse click in the search text box will clear the search input box
+            {
+                if (!string.IsNullOrWhiteSpace(textBoxSearch.Text))
+                {
+                    textBoxSearch.Clear();
+                    ClearTextBoxes();
+                    textBoxSearch.Focus();
+                    ClearStatusMessage();
+                }
+            }
+            #endregion
+
+            #region Utility methods
+            private void ClearStatusMessage()
+            {
+                toolStripStatusLabel1.Text = "";
+            }
+            #endregion
+            private void WikiApplication_Load(object sender, EventArgs e)
+            {
+                toolStripStatusLabel1.Text = "Wiki Application for Data Structures.";
+            }
+
+            #region Open 
+            private void buttonOpen_Click(object sender, EventArgs e)
+            {
+                BinaryReader br;
+                int x = 0;
+                listViewDataStructures.Items.Clear();
+                try
+                {
+                    br = new BinaryReader(new FileStream("default.dat", FileMode.Open));
                 }
                 catch (Exception fe)
                 {
-                    MessageBox.Show("Cannot read data from file or EOF" + fe);
-                    break;
+                    MessageBox.Show(fe.Message + "\n Cannot open file for reading");
+                    return;
                 }
-                ptr = x;
-                DisplayDataStructures();
-            }
-            br.Close();
-        }
-        #endregion
-
-        #region Save Button
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            BinaryWriter bw;
-            try
-            {
-                bw = new BinaryWriter(new FileStream("defaultFileName.dat", FileMode.Create));
-            }
-            catch (Exception fe)
-            {
-                MessageBox.Show(fe.Message + "\n Cannot append to file.");
-                return;
-            }
-            try
-            {
-                for (int i = 0; i < ptr; i++)
+                while (br.BaseStream.Position != br.BaseStream.Length)
                 {
-                    bw.Write(dataStructures[i, 0]);
-                    bw.Write(dataStructures[i, 1]);
-                    bw.Write(dataStructures[i, 2]);
-                    bw.Write(dataStructures[i, 3]);
+                    try
+                    {
+                        dataStructures[x, 0] = br.ReadString();
+                        dataStructures[x, 1] = br.ReadString();
+                        dataStructures[x, 2] = br.ReadString();
+                        dataStructures[x, 3] = br.ReadString();
+                        x++;
+                    }
+                    catch (Exception fe)
+                    {
+                        MessageBox.Show("Cannot read data from file or EOF" + fe);
+                        break;
+                    }
+                    ptr = x;
+                    DisplayArray();
                 }
+                br.Close();
             }
-            catch (Exception fe)
+            #endregion
+
+            #region Save Button
+            private void buttonSave_Click(object sender, EventArgs e)
             {
-                MessageBox.Show(fe.Message + "\n Cannot write data to file.");
-                return;
+                BinaryWriter bw;
+                try
+                {
+                    bw = new BinaryWriter(new FileStream("default.dat", FileMode.Create));
+                }
+                catch (Exception fe)
+                {
+                    MessageBox.Show(fe.Message + "\n Cannot append to file.");
+                    return;
+                }
+                try
+                {
+                    for (int i = 0; i < ptr; i++)
+                    {
+                        bw.Write(dataStructures[i, 0]);
+                        bw.Write(dataStructures[i, 1]);
+                        bw.Write(dataStructures[i, 2]);
+                        bw.Write(dataStructures[i, 3]);
+                    }
+                }
+                catch (Exception fe)
+                {
+                    MessageBox.Show(fe.Message + "\n Cannot write data to file.");
+                    return;
+                }
+                bw.Close();
             }
-            bw.Close();
+            #endregion
         }
-        #endregion
     }
-}
