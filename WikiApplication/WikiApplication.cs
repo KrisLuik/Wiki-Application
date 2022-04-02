@@ -72,6 +72,8 @@ namespace WikiApplication
         #region Add button
 
         private void ButtonAdd_Click(object sender, EventArgs e)
+            // Needs else if statement/ or toolstrip message when user hasn't added anything to textboxes 
+            // but clicks add button.
         {
             ClearStatusMessage();
             if (!string.IsNullOrWhiteSpace(textBoxName.Text) &&
@@ -226,7 +228,7 @@ namespace WikiApplication
                 toolStripStatusLabel1.Text = "Enter a name to search.";
                 ClearSearchBox();
             }
-            else if (!string.IsNullOrWhiteSpace(textBoxSearch.Text))
+            else if (!string.IsNullOrWhiteSpace(textBoxSearch.Text) || listViewDataStructures.Items.Count == -1)
             {
                 toolStripStatusLabel1.Text = "Error: Add data to list first.";
                 ClearSearchBox();
@@ -459,11 +461,6 @@ namespace WikiApplication
         {
             Sort();
             DisplayArray();
-        }
-
-        private void textBoxSearch_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
