@@ -58,10 +58,10 @@
             // buttonAdd
             // 
             this.buttonAdd.Location = new System.Drawing.Point(273, 51);
-            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(100, 41);
-            this.buttonAdd.TabIndex = 0;
+            this.buttonAdd.TabIndex = 9;
             this.buttonAdd.Text = "Add";
             this.toolTipWikiApplication.SetToolTip(this.buttonAdd, "Add Data Structure");
             this.buttonAdd.UseVisualStyleBackColor = true;
@@ -70,43 +70,44 @@
             // textBoxName
             // 
             this.textBoxName.Location = new System.Drawing.Point(13, 51);
-            this.textBoxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxName.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(220, 22);
             this.textBoxName.TabIndex = 0;
             this.toolTipWikiApplication.SetToolTip(this.textBoxName, "Enter Data Structure Name");
-            this.textBoxName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxName_KeyPress);
+            this.textBoxName.Click += new System.EventHandler(this.TextBoxName_Click);
+            this.textBoxName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxName_KeyPress);
             // 
             // textBoxCategory
             // 
             this.textBoxCategory.Location = new System.Drawing.Point(13, 97);
-            this.textBoxCategory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxCategory.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxCategory.Name = "textBoxCategory";
             this.textBoxCategory.Size = new System.Drawing.Size(220, 22);
             this.textBoxCategory.TabIndex = 2;
             this.toolTipWikiApplication.SetToolTip(this.textBoxCategory, "Enter Data Structure Category");
-            this.textBoxCategory.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxCategory_KeyPress);
+            this.textBoxCategory.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxCategory_KeyPress);
             // 
             // textBoxStructure
             // 
             this.textBoxStructure.Location = new System.Drawing.Point(13, 150);
-            this.textBoxStructure.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxStructure.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxStructure.Name = "textBoxStructure";
             this.textBoxStructure.Size = new System.Drawing.Size(220, 22);
             this.textBoxStructure.TabIndex = 3;
             this.toolTipWikiApplication.SetToolTip(this.textBoxStructure, "Enter Data Structure");
-            this.textBoxStructure.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxStructure_KeyPress);
+            this.textBoxStructure.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxStructure_KeyPress);
             // 
             // textBoxDefinition
             // 
             this.textBoxDefinition.Location = new System.Drawing.Point(13, 201);
-            this.textBoxDefinition.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxDefinition.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
             this.textBoxDefinition.Size = new System.Drawing.Size(220, 266);
             this.textBoxDefinition.TabIndex = 4;
             this.toolTipWikiApplication.SetToolTip(this.textBoxDefinition, "Enter Data Structure Definition");
-            this.textBoxDefinition.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDefinition_KeyPress);
+            this.textBoxDefinition.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxDefinition_KeyPress);
             // 
             // listViewDataStructures
             // 
@@ -116,7 +117,7 @@
             this.listViewDataStructures.FullRowSelect = true;
             this.listViewDataStructures.HideSelection = false;
             this.listViewDataStructures.Location = new System.Drawing.Point(273, 201);
-            this.listViewDataStructures.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewDataStructures.Margin = new System.Windows.Forms.Padding(4);
             this.listViewDataStructures.Name = "listViewDataStructures";
             this.listViewDataStructures.Size = new System.Drawing.Size(391, 266);
             this.listViewDataStructures.TabIndex = 5;
@@ -138,7 +139,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Location = new System.Drawing.Point(377, 51);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 41);
             this.buttonDelete.TabIndex = 6;
@@ -150,7 +151,7 @@
             // buttonSearch
             // 
             this.buttonSearch.Location = new System.Drawing.Point(273, 95);
-            this.buttonSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSearch.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(100, 41);
             this.buttonSearch.TabIndex = 7;
@@ -162,7 +163,7 @@
             // buttonEdit
             // 
             this.buttonEdit.Location = new System.Drawing.Point(377, 95);
-            this.buttonEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonEdit.Margin = new System.Windows.Forms.Padding(4);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(100, 41);
             this.buttonEdit.TabIndex = 8;
@@ -174,10 +175,10 @@
             // textBoxSearch
             // 
             this.textBoxSearch.Location = new System.Drawing.Point(273, 150);
-            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(391, 22);
-            this.textBoxSearch.TabIndex = 9;
+            this.textBoxSearch.TabIndex = 5;
             this.toolTipWikiApplication.SetToolTip(this.textBoxSearch, "Data Structure Search TextBox");
             this.textBoxSearch.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxSearch_MouseDoubleClick);
             // 
@@ -224,7 +225,7 @@
             // buttonOpen
             // 
             this.buttonOpen.Location = new System.Drawing.Point(462, 472);
-            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(100, 41);
             this.buttonOpen.TabIndex = 14;
@@ -236,7 +237,7 @@
             // buttonSave
             // 
             this.buttonSave.Location = new System.Drawing.Point(565, 472);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(100, 41);
             this.buttonSave.TabIndex = 15;
@@ -266,26 +267,28 @@
             // buttonTest
             // 
             this.buttonTest.Location = new System.Drawing.Point(128, 475);
-            this.buttonTest.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonTest.Margin = new System.Windows.Forms.Padding(4);
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(105, 28);
             this.buttonTest.TabIndex = 18;
             this.buttonTest.Text = "test";
             this.toolTipWikiApplication.SetToolTip(this.buttonTest, "Fill Listview with Test Data");
             this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Visible = false;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // buttonSort
             // 
             this.buttonSort.Location = new System.Drawing.Point(13, 475);
-            this.buttonSort.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSort.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSort.Name = "buttonSort";
             this.buttonSort.Size = new System.Drawing.Size(107, 28);
             this.buttonSort.TabIndex = 19;
             this.buttonSort.Text = "sort";
             this.toolTipWikiApplication.SetToolTip(this.buttonSort, "Sort Data");
             this.buttonSort.UseVisualStyleBackColor = true;
-            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
+            this.buttonSort.Visible = false;
+            this.buttonSort.Click += new System.EventHandler(this.ButtonSort_Click);
             // 
             // toolTipWikiApplication
             // 
@@ -315,10 +318,11 @@
             this.Controls.Add(this.textBoxCategory);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.buttonAdd);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WikiApplication";
             this.Text = "Wiki Data Structures";
             this.Load += new System.EventHandler(this.WikiApplication_Load);
+            this.Click += new System.EventHandler(this.WikiApplication_Click);
             this.statusStripMessage.ResumeLayout(false);
             this.statusStripMessage.PerformLayout();
             this.ResumeLayout(false);
